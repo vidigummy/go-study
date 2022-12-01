@@ -2,18 +2,17 @@ package main
 
 import (
 	"fmt"
-	"log"
 
-	"example.com/m/v2/banking"
+	"example.com/m/v2/mydict"
 )
 
 func main() {
-	newAccount := banking.NewAccount("vidigummy")
-	newAccount.Deposit(3000000)
-	err := newAccount.Withdraw(100)
+	dictionary := mydict.Dictionary{"first": "First Word"}
+	definition, err := dictionary.Search("second")
 	if err != nil {
-		log.Fatalln(err)
+		fmt.Println(err)
+	} else {
+		fmt.Println(definition)
 	}
-	newAccount.ChangeOwner("류동인")
-	fmt.Println(newAccount.ToString())
+
 }
