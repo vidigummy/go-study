@@ -2,30 +2,65 @@ package main
 
 import (
 	"fmt"
-	"time"
+	"log"
+	"net/http"
+	"strconv"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
-func main() {
-	channel := make(chan string)
-	people := []string{"nico", "flynn", "vidigummy"}
-	for _, person := range people {
-		go isSexy(person, channel)
-	}
-	// result := <-channel
-	fmt.Println("wating for messages")
-	// 메세지가 채널에 들어온 만큼만 뽑아낼 수 있다. 초과할 시 deadlock 뜬다.
-	for i := 0; i < len(people); i++ {
-		fmt.Println("Receved this message : ", <-channel)
-	}
+var baseURL string = "https://csbroker.io/problem"
 
-	// fmt.Println("Receved this message : ", <-channel)
-	//
-	// fmt.Println("Receved this message : ", <-channel)
-	// time.Sleep(time.Second * 10)
+func main() {
+	// totalPages := getPages()
+	// fmt.Println("totalPages : ", totalPages)
+	for i := 0; i < 7; i++ {
+		getPage(i)
+	}
 }
 
-func isSexy(person string, c chan string) {
-	// fmt.Println(person)
-	time.Sleep(time.Second * 2)
-	c <- person + "is sexy"
+func getPage(page int) {
+	pageURL := baseURL + "?page=" + strconv.Itoa(page+1)
+	fmt.Println(pageURL)
+	res, err := http.Get(pageURL)
+	checkErr(err)
+	checkCode(res)
+
+	defer res.Body.Close()
+
+	doc, err := goquery.NewDocumentFromReader(res.Body)
+	checkErr(err)
+
+	searchCards := doc.Find("a")
+	searchCards.Each(func(i int, s *goquery.Selection) {
+
+	})
+
+}
+
+// func getPages() int {
+// 	pages := 0
+// 	res, err := http.Get(baseURL)
+// 	checkErr(err)
+// 	checkCode(res)
+
+// 	defer res.Body.Close()
+
+// 	doc, err := goquery.NewDocumentFromReader(res.Body)
+// 	checkErr(err)
+// 	doc.Find(".ntcg5*").Each(func(i int, s *goquery.Selection) {
+// 		pages = s.Find("button").Length()
+// 	})
+// 	return pages - 4
+// }
+
+func checkErr(err error) {
+	if err != nil {
+		log.Fatalln(err)
+	}
+}
+func checkCode(res *http.Response) {
+	if res.StatusCode != 200 {
+		log.Fatalln("Request failed with Status: ", res.StatusCode)
+	}
 }
