@@ -7,12 +7,22 @@ import (
 )
 
 func main() {
-	dictionary := mydict.Dictionary{"first": "First Word"}
-	definition, err := dictionary.Search("second")
-	if err != nil {
-		fmt.Println(err)
+	dictionary := mydict.Dictionary{}
+	baseword := "hello"
+	dictionary.Add(baseword, "greetings")
+	word, _ := dictionary.Search(baseword)
+	fmt.Println("삭제 전 : ", word)
+	dictionary.Delete(baseword)
+	deltedWord, err := dictionary.Search(baseword)
+	if err == nil {
+		fmt.Println("성공 : ", deltedWord)
 	} else {
-		fmt.Println(definition)
+		fmt.Println(err)
 	}
-
+	delErr := dictionary.Delete(baseword)
+	if delErr != nil {
+		fmt.Println(delErr)
+	} else {
+		fmt.Println("왜 되냐")
+	}
 }
