@@ -1,0 +1,24 @@
+{ID: 527180785, NodeID: "R_kgDOH2wj8Q", Owner:github.User
+{Login: "vidigummy", ID: 33488236, NodeID: "MDQ6VXNlcjMzNDg4MjM2", AvatarURL: "https://avatars.githubusercontent.com/u/33488236?v=4", HTMLURL: "https://github.com/vidigummy", GravatarID: "", Type: "User", SiteAdmin: false, URL: "https://api.github.com/users/vidigummy", EventsURL: "https://api.github.com/users/vidigummy/events{/privacy}", FollowingURL: "https://api.github.com/users/vidigummy/following{/other_user}", FollowersURL: "https://api.github.com/users/vidigummy/followers", GistsURL: "https://api.github.com/users/vidigummy/gists{/gist_id}", OrganizationsURL: "https://api.github.com/users/vidigummy/orgs", ReceivedEventsURL: "https://api.github.com/users/vidigummy/received_events", ReposURL: "https://api.github.com/users/vidigummy/repos", StarredURL: "https://api.github.com/users/vidigummy/starred{/owner}{/repo}", SubscriptionsURL: "https://api.github.com/users/vidigummy/subscriptions"
+    }, Name: "apache-kafka-with-java", FullName: "vidigummy/apache-kafka-with-java", Description: "아파치 카프카 애플리케이션 프로그래밍 with 자바 by Dev원영", Homepage: "", DefaultBranch: "master", CreatedAt:github.Timestamp{
+        2022-08-21 11: 03: 30 +0000 UTC
+    }, PushedAt:github.Timestamp{
+        2022-02-18 11: 26: 58 +0000 UTC
+    }, UpdatedAt:github.Timestamp{
+        2022-08-18 07: 12: 11 +0000 UTC
+    }, 
+     MergesURL: "https://api.github.com/repos/vidigummy/apache-kafka-with-java/merges", 
+     MilestonesURL: "https://api.github.com/repos/vidigummy/apache-kafka-with-java/milestones{/number}", 
+     NotificationsURL: "https://api.github.com/repos/vidigummy/apache-kafka-with-java/notifications{?since,all,participating}",
+      PullsURL: "https://api.github.com/repos/vidigummy/apache-kafka-with-java/pulls{/number}", 
+      ReleasesURL: "https://api.github.com/repos/vidigummy/apache-kafka-with-java/releases{/id}", S
+      targazersURL: "https://api.github.com/repos/vidigummy/apache-kafka-with-java/stargazers", 
+      StatusesURL: "https://api.github.com/repos/vidigummy/apache-kafka-with-java/statuses/{sha}", 
+      SubscribersURL: "https://api.github.com/repos/vidigummy/apache-kafka-with-java/subscribers",
+       SubscriptionURL: "https://api.github.com/repos/vidigummy/apache-kafka-with-java/subscription",
+        TagsURL: "https://api.github.com/repos/vidigummy/apache-kafka-with-java/tags", 
+        TreesURL: "https://api.github.com/repos/vidigummy/apache-kafka-with-java/git/trees{/sha}", 
+        TeamsURL: "https://api.github.com/repos/vidigummy/apache-kafka-with-java/teams"
+}
+
+

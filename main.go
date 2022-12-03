@@ -2,83 +2,62 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"net/http"
-	"time"
+	"strings"
 
 	"github.com/google/go-github/github"
 	"github.com/labstack/echo"
 )
 
-var myClient = &http.Client{Timeout: 10 * time.Second}
-
-type userInfoGithub struct {
-	login     string
-	id        int
-	repos_url string
-}
-
 func main() {
 	e := echo.New()
 	e.GET("/", func(c echo.Context) error {
-		testGithubApi("vidigummy")
-		return c.File("home.html")
+		userName := "dengoyoon"
+		repoList, err := getRepo(userName)
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(repoList)
+		for _, repoName := range repoList {
+			getRepoLanguages(userName, repoName)
+		}
+		return c.File("hi World")
 	})
 	e.Logger.Fatal(e.Start(":8080"))
 }
 
-func testGithubApi(username string) error {
+func getRepo(username string) ([]string, error) {
 	client := github.NewClient(nil)
 	ctx := context.Background()
-	// opt := &github.RepositoryListByOrgOptions{Type: "public"}
 	opt := &github.RepositoryListOptions{Type: "public"}
-	// repos, _, err := client.Repositories.ListByOrg(ctx, username, opt)
 	repos, _, err := client.Repositories.List(ctx, username, opt)
 	if err != nil {
 		fmt.Println(err)
+		return strings.Split("err err", " "), err
 	}
-	// fmt.Println(repos)
+	var reposList []string = make([]string, len(repos))
+	repoChan := make(chan string)
 	for _, repo := range repos {
-		fmt.Println(repo)
+		go getUrl(*repo.LanguagesURL, repoChan)
 	}
-	return nil
+	for i := 0; i < len(repos)-1; i++ {
+		tmp := <-repoChan
+		reposList[i] = tmp
+	}
+	return reposList, nil
 }
 
-func getUserInfo(username string) (string, error) {
-	userApiURL := "https://api.github.com/users/" + username
-	// vidigummyInfo := new(userInfoGithub)
-	// err := getJson(userApiURL, vidigummyInfo)
-	err := getUserInfoFromURL(userApiURL)
+func getUrl(url string, c chan<- string) {
+	slicedURL := strings.Split(url, "/")
+	c <- slicedURL[5]
+}
+
+func getRepoLanguages(userName string, repoName string) {
+	client := github.NewClient(nil)
+	ctx := context.Background()
+	languages, _, err := client.Repositories.ListLanguages(ctx, userName, repoName)
 	if err != nil {
 		fmt.Println(err)
 	}
-	// fmt.Println(vidigummyInfo.repos_url)
-	return "OK", nil
-}
-
-func getJson(url string, target interface{}) error {
-	r, err := myClient.Get(url)
-	if err != nil {
-		return err
-	}
-	defer r.Body.Close()
-
-	return json.NewDecoder(r.Body).Decode(target)
-}
-
-func getUserInfoFromURL(url string) error {
-	res, err := http.Get(url)
-	if err != nil {
-		panic(err.Error())
-	}
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		panic(err.Error())
-	}
-	var data userInfoGithub
-	json.Unmarshal(body, &data)
-	fmt.Printf("Results: %v\n", data)
-	return nil
+	fmt.Println(userName, repoName, languages)
 }
