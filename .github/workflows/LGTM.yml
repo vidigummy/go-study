@@ -1,0 +1,18 @@
+name: LGTM
+
+on:
+  pull_request:
+
+jobs:
+  start-commenting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: start-commenting
+        uses: thollander/actions-comment-pull-request@v1
+        with:
+          message: |
+            [![LGTM](https://lgtm.lol/p/659)](https://lgtm.lol/i/659)
+          GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
+
+# 메시지엔 뭐... lgtm.lol에 있는것 중에 마음에 드는거 넣으시구요...
+# 토큰엔 자기거 넣으면 돼요!
