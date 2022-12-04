@@ -11,18 +11,27 @@ import (
 
 func main() {
 	e := echo.New()
+	// ECHO를 씀. GIN 사용하자.
 	e.GET("/", func(c echo.Context) error {
-		userName := "dengoyoon"
+		// 내 레포에 어떤 언어가 얼마나 있는지 확인할 수 있음.
+		userName := "vidigummy"
 		repoList, err := getRepo(userName)
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Println(repoList)
+		// 레포 리스트 확인용(무슨 레포가 있는지)
+		// fmt.Println(repoList)
+
+		// 랭귀지맵은 사용자의 언어 map이라고 할 수 있죠
 		languageMap := make(map[string]int)
+
+		// api들 동시에 호출, 빠르게 가져오기
+		// 403 뜨네? 큰일난걸지두...
 		repoChan := make(chan map[string]int)
 		for _, repoName := range repoList {
 			go getRepoLanguages(userName, repoName, repoChan)
 		}
+		// 가져온 리스트 싹 다 한 레포에 집어넣기
 		for i := 0; i < len(repoList); i++ {
 			tmpLanguageMap := <-repoChan
 			for key, value := range tmpLanguageMap {
@@ -35,7 +44,7 @@ func main() {
 			}
 		}
 		fmt.Println(languageMap)
-		return c.File("hi World")
+		return c.File("home.html")
 	})
 	e.Logger.Fatal(e.Start(":8080"))
 }
@@ -74,5 +83,4 @@ func getRepoLanguages(userName string, repoName string, c chan<- map[string]int)
 		fmt.Println(err)
 	}
 	c <- languages
-	// fmt.Println(userName, repoName, languages)
 }
