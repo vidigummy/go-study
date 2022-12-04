@@ -18,9 +18,23 @@ func main() {
 			fmt.Println(err)
 		}
 		fmt.Println(repoList)
+		languageMap := make(map[string]int)
+		repoChan := make(chan map[string]int)
 		for _, repoName := range repoList {
-			getRepoLanguages(userName, repoName)
+			go getRepoLanguages(userName, repoName, repoChan)
 		}
+		for i := 0; i < len(repoList); i++ {
+			tmpLanguageMap := <-repoChan
+			for key, value := range tmpLanguageMap {
+				checkData, exists := languageMap[key]
+				if !exists {
+					languageMap[key] = value
+				} else {
+					languageMap[key] = checkData + value
+				}
+			}
+		}
+		fmt.Println(languageMap)
 		return c.File("hi World")
 	})
 	e.Logger.Fatal(e.Start(":8080"))
@@ -52,12 +66,13 @@ func getUrl(url string, c chan<- string) {
 	c <- slicedURL[5]
 }
 
-func getRepoLanguages(userName string, repoName string) {
+func getRepoLanguages(userName string, repoName string, c chan<- map[string]int) {
 	client := github.NewClient(nil)
 	ctx := context.Background()
 	languages, _, err := client.Repositories.ListLanguages(ctx, userName, repoName)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(userName, repoName, languages)
+	c <- languages
+	// fmt.Println(userName, repoName, languages)
 }
